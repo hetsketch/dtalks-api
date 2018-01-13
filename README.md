@@ -1,6 +1,6 @@
 # What is DevTalks?
-DevTalks is open-source social network for IT professionals. Here you can chatting in our forum or via PM, finding jobs, looking for events(like conferences, talks, etc.) and rate companies.
-
+DevTalks is open-source social network for IT professionals. Here you can chatting in our forum or via PM, finding jobs, looking for events(like conferences, talks, etc.) and rate companies.  
+[![pipeline status](https://gitlab.com/hetsketch/dtalks-api/badges/master/pipeline.svg)](https://gitlab.com/hetsketch/dtalks-api/commits/master) [![coverage report](https://gitlab.com/hetsketch/dtalks-api/badges/master/coverage.svg)](https://gitlab.com/hetsketch/dtalks-api/commits/master)
 # How to install
 Firstly, clone the repository  
 `git clone https://gitlab.com/hetsketch/dtalks-api.git`  
