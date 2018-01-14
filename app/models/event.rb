@@ -21,5 +21,5 @@ class Event < ApplicationRecord
   # Callbacks
 
   # Uploaders
-  #mount_uploader :photo, PhotoUploader
+  # mount_uploader :photo, PhotoUploader
 end

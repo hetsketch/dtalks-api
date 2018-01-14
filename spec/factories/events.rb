@@ -10,8 +10,8 @@ FactoryGirl.define do
     association :author, factory: :user
 
     trait :passed do
-      sequence(:start_time) { |n| "#{Faker::Time.backward - n.hour}" }
-      sequence(:end_time) { |n| "#{DateTime.now - n.hour}" }
+      sequence(:start_time) { |n| (Faker::Time.backward - n.hour).to_s }
+      sequence(:end_time) { |n| (DateTime.now - n.hour).to_s }
     end
 
     trait :future do

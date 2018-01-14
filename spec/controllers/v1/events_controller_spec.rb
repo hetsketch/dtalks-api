@@ -15,8 +15,10 @@ RSpec.describe V1::EventsController, type: :controller do
         subject
 
         expect(json_data.length).to eq(2)
-        expect(json_data[0]['title']).to eq(future_events[0].title)
-        expect(json_data[1]['title']).to eq(future_events[1].title)
+        expect([json_data[0]['title'], json_data[1]['title']]).to include(
+          future_events[0].title,
+          future_events[1].title
+        )
       end
     end
 

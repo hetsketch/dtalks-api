@@ -7,7 +7,6 @@ class V1::UsersController < ApplicationController
   end
 
   def show
-
   end
 
   def create
@@ -34,6 +33,7 @@ class V1::UsersController < ApplicationController
     params.require(:user).permit(
       :username, :email, :password, :password_confirmation, :remember_me,
       :first_name, :last_name, :address, :city, :bio, :avatar,
-      :avatar_crop_x, :avatar_crop_y, :avatar_crop_w, :avatar_crop_h)
+      :avatar_crop_x, :avatar_crop_y, :avatar_crop_w, :avatar_crop_h
+    )
   end
 end

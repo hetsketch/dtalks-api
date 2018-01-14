@@ -25,7 +25,7 @@ RSpec.describe V1::Topics::CommentsController, type: :controller do
       end
 
       context 'when add comment to nonexistent topic' do
-        let(:params) { attributes_for(:comment).reverse_merge(topic_id: 18243) }
+        let(:params) { attributes_for(:comment).reverse_merge(topic_id: 18_243) }
 
         it { is_expected.to have_http_status(:not_found) }
         it 'does not create a comment' do
@@ -103,7 +103,7 @@ RSpec.describe V1::Topics::CommentsController, type: :controller do
       end
 
       context 'when comment does not exist' do
-        let(:params) { { id: 18650, topic_id: topic.id } }
+        let(:params) { { id: 18_650, topic_id: topic.id } }
 
         it { is_expected.to have_http_status(:not_found) }
         it 'does not delete comment' do

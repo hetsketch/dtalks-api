@@ -16,7 +16,7 @@ class V1::Users::OmniauthCallbacksController < DeviseTokenAuth::OmniauthCallback
     user.assign_attributes(user_attributes)
   end
 
-  def render_data(message, data)
+  def render_data(_message, _data)
     @user = @resource
     build_auth_headers(@user)
     render 'v1/users/show', status: :created

@@ -40,5 +40,4 @@ RSpec.describe Topic, type: :model do
       it { is_expected.to have(3).items }
     end
   end
-
 end

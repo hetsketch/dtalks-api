@@ -62,11 +62,11 @@ class User < ApplicationRecord
     def with_vk(user, auth)
       user.first_name = auth.info.first_name
       user.last_name = auth.info.last_name
-      if auth.extra.screen_name
-        user.username = auth.extra.screen_name
-      else
-        user.username = user.first_name[0].upcase + user.last_name[0].upcase
-      end
+      user.username = if auth.extra.screen_name
+                        auth.extra.screen_name
+                      else
+                        user.first_name[0].upcase + user.last_name[0].upcase
+                      end
     end
 
     def with_github(user, auth)
@@ -75,7 +75,7 @@ class User < ApplicationRecord
     end
   end
 
-  def has_avatar?
+  def avatar?
     avatar.present?
   end
 

@@ -24,10 +24,4 @@ class Topic < ApplicationRecord
   # add comments
   # add comments counter
   is_impressionable(counter_cache: true)
-
-  private
-
-  # def set_author
-  #   self.author = current_user
-  # end
 end

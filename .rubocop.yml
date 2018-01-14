@@ -21,3 +21,11 @@ Metrics/MethodLength:
   Enabled: false
 Metrics/LineLength:
   Max: 120
+Style/BlockLength:
+  Exclude:
+    - 'Rakefile'
+    - '**/*.rake'
+    - 'spec/**/*.rb'
+Security/Eval:
+  Exclude:
+    - 'spec/**/*.rb'

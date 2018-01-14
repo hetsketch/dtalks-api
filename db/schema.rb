@@ -17,7 +17,6 @@ ActiveRecord::Schema.define(version: 20171215102727) do
 
   create_table "comments", id: :serial, force: :cascade do |t|
     t.text "text"
-    t.datetime "posted_date"
     t.integer "user_id"
     t.string "commentable_type"
     t.integer "commentable_id"
@@ -87,15 +86,6 @@ ActiveRecord::Schema.define(version: 20171215102727) do
     t.index ["impressionable_type", "impressionable_id", "session_hash"], name: "poly_session_index"
     t.index ["impressionable_type", "message", "impressionable_id"], name: "impressionable_type_message_index"
     t.index ["user_id"], name: "index_impressions_on_user_id"
-  end
-
-  create_table "participants", id: :serial, force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "event_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["event_id"], name: "index_participants_on_event_id"
-    t.index ["user_id"], name: "index_participants_on_user_id"
   end
 
   create_table "topics", id: :serial, force: :cascade do |t|

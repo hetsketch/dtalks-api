@@ -2,14 +2,14 @@
 
 class V1::TopicsController < ApplicationController
   before_action :authenticate_v1_user!, except: [:show, :index]
-  impressionist :action => [:show]
+  impressionist action: [:show]
 
   def index
     @topics = Topic.includes(:author).all.recently_added
   end
 
   def show
-    @topic = Topic.includes([:comments => :author]).find(params[:id])
+    @topic = Topic.includes([comments: :author]).find(params[:id])
   end
 
   def create

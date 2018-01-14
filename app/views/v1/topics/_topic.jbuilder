@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 json.extract!(topic, :id, :title, :text, :created_at)
 json.views_count(topic.impressions_count)
 
