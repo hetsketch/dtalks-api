@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
-json.extract!(topic, :id, :title, :text, :created_at)
+json.extract!(topic, :id, :title, :text, :comments_count, :created_at)
 json.views_count(topic.impressions_count)
 
 json.author do
-  json.extract!(topic.author, :first_name, :last_name, :username)
+  json.extract!(topic.author, :id, :full_name, :username, :position)
 end
-
-json.comments(topic.comments)

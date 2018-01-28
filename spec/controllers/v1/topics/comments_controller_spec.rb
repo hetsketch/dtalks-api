@@ -22,6 +22,7 @@ RSpec.describe V1::Topics::CommentsController, type: :controller do
         expect(json_data).not_to be_empty
         expect(topic.comments.count).to eql(1)
         expect(topic.comments.first.author).to eql(user)
+        expect(topic.reload.comments_count).to eql(1)
       end
 
       context 'when add comment to nonexistent topic' do
@@ -33,7 +34,7 @@ RSpec.describe V1::Topics::CommentsController, type: :controller do
 
           expect(json_success_status).to be_falsey
           expect(json_errors).not_to be_empty
-          expect(Comment.count).to be_eql(0)
+          expect(Comment.count).to eql(0)
         end
       end
     end
@@ -45,7 +46,7 @@ RSpec.describe V1::Topics::CommentsController, type: :controller do
 
         expect(json_success_status).to be_falsey
         expect(json_errors).not_to be_empty
-        expect(Comment.count).to be_eql(0)
+        expect(Comment.count).to eql(0)
       end
     end
   end
@@ -67,7 +68,7 @@ RSpec.describe V1::Topics::CommentsController, type: :controller do
         subject
 
         expect(json_success_status).to be_truthy
-        expect(json_data['text']).to be_eql('new text')
+        expect(json_data['text']).to eql('new text')
       end
     end
 
@@ -98,7 +99,8 @@ RSpec.describe V1::Topics::CommentsController, type: :controller do
           subject
 
           expect(json_success_status).to be_truthy
-          expect(topic.comments.count).to be_eql(0)
+          expect(topic.comments.count).to eql(0)
+          expect(topic.reload.comments_count).to eql(0)
         end
       end
 

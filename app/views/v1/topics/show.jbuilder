@@ -4,4 +4,5 @@ json.success true
 
 json.data do
   json.partial! 'v1/topics/topic', topic: @topic
+  json.comments @topic.comments, partial: 'v1/topics/comments/comment', as: :comment
 end

@@ -9,7 +9,7 @@ class V1::TopicsController < ApplicationController
   end
 
   def show
-    @topic = Topic.includes([comments: :author]).find(params[:id])
+    @topic = Topic.includes(comments: [:author]).find(params[:id])
   end
 
   def create
