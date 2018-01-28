@@ -17,14 +17,24 @@ module DTalks
 
     config.generators do |g|
       g.test_framework :rspec,
-        fixtures: false,
-        view_specs: false,
-        helper_specs: false,
-        routing_specs: false
+                       fixtures: false,
+                       view_specs: false,
+                       helper_specs: false,
+                       routing_specs: false
     end
 
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore, key: '_namespace_key'
     config.middleware.use ActionDispatch::Flash
+
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins '*'
+
+        resource '*',
+                 headers: :any,
+                 methods: [:get, :post, :put, :patch, :delete, :options, :head]
+      end
+    end
   end
 end
