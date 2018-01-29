@@ -19,7 +19,7 @@ RSpec.shared_examples 'a show action' do
   end
 
   context 'when entity does not exist' do
-    let(:params) { { id: 100 } }
+    let(:params) { { id: 100_000 } }
 
     it { is_expected.to have_http_status :not_found }
     it 'returns an error' do

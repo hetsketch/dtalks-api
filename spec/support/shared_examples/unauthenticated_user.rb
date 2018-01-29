@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.shared_examples 'an unauthenticated user' do
-  it 'return authentication error' do
+  it 'returns authentication error' do
     subject
 
     expect(json_success_status).to be_falsey
