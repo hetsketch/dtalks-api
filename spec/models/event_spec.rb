@@ -54,4 +54,20 @@ RSpec.describe Event, type: :model do
       end
     end
   end
+
+  describe '#location' do
+    subject { event.location }
+
+    context 'when online event' do
+      let(:event) { build(:event, online: true) }
+
+      it { is_expected.to eql 'online' }
+    end
+
+    context 'when event is real' do
+      let(:event) { build(:event, city: 'Moscow', address: 'Lenina Str') }
+
+      it { is_expected.to eql "#{event.city}, #{event.address}" }
+    end
+  end
 end

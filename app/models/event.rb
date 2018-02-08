@@ -23,4 +23,9 @@ class Event < ApplicationRecord
 
   # Uploaders
   # mount_uploader :photo, PhotoUploader
+
+  def location
+    return 'online' if online?
+    [city, address].join(', ')
+  end
 end
