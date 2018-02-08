@@ -25,7 +25,8 @@ RSpec.describe Event, type: :model do
 
     # Associations
     it { is_expected.to belong_to(:author).class_name('User').with_foreign_key('user_id') }
-    it { is_expected.to have_and_belong_to_many(:participants).class_name('User') }
+    it { is_expected.to have_many(:participants).counter_cache(:participants_count) }
+    it { is_expected.to have_many(:users).through(:participants) }
   end
 
   describe 'scopes' do

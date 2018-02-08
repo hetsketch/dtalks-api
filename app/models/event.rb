@@ -9,7 +9,8 @@ class Event < ApplicationRecord
   # Enums
 
   # Associations
-  has_and_belongs_to_many :participants, class_name: 'User'
+  has_many :participants, counter_cache: :participants_count
+  has_many :users, through: :participants
   # has_many :comments, as: :commentable, dependent: :destroy
   belongs_to :author, class_name: 'User', foreign_key: 'user_id'
 

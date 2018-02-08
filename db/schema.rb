@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180129073340) do
+ActiveRecord::Schema.define(version: 20180206145140) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,6 +54,7 @@ ActiveRecord::Schema.define(version: 20180129073340) do
     t.datetime "start_time", null: false
     t.datetime "end_time", null: false
     t.string "photo"
+    t.integer "participants_count", default: 0
     t.index ["user_id"], name: "index_events_on_user_id"
   end
 
@@ -87,6 +88,15 @@ ActiveRecord::Schema.define(version: 20180129073340) do
     t.index ["impressionable_type", "impressionable_id", "session_hash"], name: "poly_session_index"
     t.index ["impressionable_type", "message", "impressionable_id"], name: "impressionable_type_message_index"
     t.index ["user_id"], name: "index_impressions_on_user_id"
+  end
+
+  create_table "participants", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "event_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "index_participants_on_event_id"
+    t.index ["user_id"], name: "index_participants_on_user_id"
   end
 
   create_table "topics", id: :serial, force: :cascade do |t|
@@ -130,5 +140,7 @@ ActiveRecord::Schema.define(version: 20180129073340) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "participants", "events"
+  add_foreign_key "participants", "users"
   add_foreign_key "users", "companies"
 end

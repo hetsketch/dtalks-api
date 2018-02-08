@@ -26,7 +26,7 @@ class V1::EventsController < ApplicationController
   def create
     @event = Event.new(event_params)
     @event.author = current_v1_user
-    @event.participants << current_v1_user
+    @event.participants.build(user: current_v1_user, event: @event)
     @event.save!
     render 'v1/events/event', status: :created
   end
