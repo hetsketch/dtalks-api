@@ -15,8 +15,8 @@ FactoryGirl.define do
     end
 
     trait :future do
-      start_time DateTime.now + 1.day
-      end_time Faker::Time.forward
+      sequence(:start_time) { |n| (DateTime.now + n.day).to_s }
+      sequence(:end_time) { |n| (Faker::Time.forward - n.day).to_s }
     end
   end
 end

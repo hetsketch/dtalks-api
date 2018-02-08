@@ -15,10 +15,10 @@ RSpec.describe V1::EventsController, type: :controller do
         subject
 
         expect(json_data.length).to eq(2)
-        expect([json_data[0]['title'], json_data[1]['title']]).to include(
-          future_events[0].title,
-          future_events[1].title
-        )
+        expect(json_data[future_events.first.start_time.strftime('%Y-%m-%d')].first['title'])
+          .to eql future_events.first.title
+        expect(json_data[future_events.last.start_time.strftime('%Y-%m-%d')].first['title'])
+          .to eql future_events.last.title
       end
     end
 

@@ -9,7 +9,7 @@ class V1::EventsController < ApplicationController
   end
 
   def index
-    @events = Event.future
+    @grouped_events = Event.future.group_by { |e| e.start_time.strftime('%Y-%m-%d') }
   end
 
   def update
