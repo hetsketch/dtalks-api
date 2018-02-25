@@ -29,3 +29,5 @@ Style/BlockLength:
 Security/Eval:
   Exclude:
     - 'spec/**/*.rb'
+SpaceInLambdaLiteral:
+  EnforcedStyle: require_space
