@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class V1::CommentsController < ApplicationController
-  before_action :authenticate_v1_user!
+  before_action :authenticate_v1_user!, except: [:index]
 
   def create
     @comment = Comment.new(comment_params)
@@ -19,6 +19,11 @@ class V1::CommentsController < ApplicationController
   def destroy
     comment&.destroy!
     render json: { success: true }, status: :ok
+  end
+
+  def index
+    @comments = @commentable.comments.includes(:author)
+    render 'v1/topics/comments/index'
   end
 
   private
