@@ -127,4 +127,33 @@ RSpec.describe V1::Topics::CommentsController, type: :controller do
       end
     end
   end
+
+  describe 'GET #index' do
+    let(:params) { { topic_id: topic.id } }
+
+    subject { get :index, params: params }
+
+    context 'when topic has comments' do
+      let!(:topic_comments) { create_list(:comment, 3, commentable: topic) }
+      let!(:other_comments) { create_list(:comment, 2) }
+
+      it_behaves_like 'a success request'
+      it 'returns only given topic comments' do
+        subject
+
+        expect(json_data).not_to be_empty
+        expect(json_data['comments'].length).to eql(3)
+      end
+    end
+
+    context 'when topic has not comments' do
+      it_behaves_like 'a success request'
+      it 'returns empty array' do
+        subject
+
+        expect(json_data).not_to be_empty
+        expect(json_data['comments'].length).to eql(0)
+      end
+    end
+  end
 end
