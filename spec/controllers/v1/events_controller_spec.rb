@@ -39,7 +39,7 @@ RSpec.describe V1::EventsController, type: :controller do
         context 'when city param presents' do
           let!(:past_city_events) { create_list(:event, 2, :past, city: 'Saint P.') }
 
-          subject { get :index, params: { status: 'past', cities:['Saint P.'] } }
+          subject { get :index, params: { status: 'past', cities: ['Saint P.'] } }
 
           it 'returns past events by cities' do
             subject
