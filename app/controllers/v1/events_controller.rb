@@ -2,6 +2,7 @@
 
 class V1::EventsController < ApplicationController
   before_action :authenticate_v1_user!, except: [:show, :index]
+  impressionist action: [:show]
 
   def show
     @event = event
@@ -9,7 +10,9 @@ class V1::EventsController < ApplicationController
   end
 
   def index
-    @grouped_events = Event.future.group_by { |e| e.start_time.strftime('%Y-%m-%d') }
+    @events = params[:status].present? ? Event.past : Event.upcoming
+    @events = @events.city_events(params[:cities]) if params[:cities].present?
+    @events = Event.group_by_day(@events)
   end
 
   def update
@@ -34,7 +37,8 @@ class V1::EventsController < ApplicationController
   private
 
   def event_params
-    params.permit(:id, :title, :text, :start_time, :end_time, :user_id, :photo)
+    params.permit(:id, :title, :text, :start_time, :end_time, :city, :user_id, :photo, :online, :address, :latitude,
+                  :longitude, :price, :free)
   end
 
   def event

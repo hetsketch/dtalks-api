@@ -7,7 +7,7 @@ RSpec.describe V1::EventsController, type: :controller do
     subject { get :index }
 
     context 'when events exist' do
-      let!(:passed_events) { create_list(:event, 3, :passed) }
+      let!(:passed_events) { create_list(:event, 3, :past) }
       let!(:future_events) { create_list(:event, 2, :future) }
 
       it_behaves_like 'a success request'
@@ -19,6 +19,54 @@ RSpec.describe V1::EventsController, type: :controller do
           .to eql future_events.first.title
         expect(json_data[future_events.last.start_time.strftime('%Y-%m-%d')].first['title'])
           .to eql future_events.last.title
+      end
+
+      context 'when past param presents' do
+        subject { get :index, params: { status: 'past' } }
+
+        it 'returns only past events' do
+          subject
+
+          expect(json_data.length).to eq(3)
+          expect(json_data[passed_events.first.start_time.strftime('%Y-%m-%d')].first['title'])
+            .to eql passed_events.first.title
+          expect(json_data[passed_events.second.start_time.strftime('%Y-%m-%d')].first['title'])
+            .to eql passed_events.second.title
+          expect(json_data[passed_events.last.start_time.strftime('%Y-%m-%d')].first['title'])
+            .to eql passed_events.last.title
+        end
+
+        context 'when city param presents' do
+          let!(:past_city_events) { create_list(:event, 2, :past, city: 'Saint P.') }
+
+          subject { get :index, params: { status: 'past', cities:['Saint P.'] } }
+
+          it 'returns past events by cities' do
+            subject
+
+            expect(json_data.length).to eql(2)
+            expect(json_data[past_city_events.first.start_time.strftime('%Y-%m-%d')].first['title'])
+              .to eql past_city_events.first.title
+            expect(json_data[past_city_events.second.start_time.strftime('%Y-%m-%d')].first['title'])
+              .to eql past_city_events.second.title
+          end
+        end
+      end
+
+      context 'when city param presents' do
+        let!(:city_events) { create_list(:event, 2, :future, city: 'Moscow') }
+
+        subject { get :index, params: { cities: ['Moscow'] } }
+
+        it 'returns upcoming events by cities' do
+          subject
+
+          expect(json_data.length).to eql(2)
+          expect(json_data[city_events.first.start_time.strftime('%Y-%m-%d')].first['title'])
+            .to eql city_events.first.title
+          expect(json_data[city_events.second.start_time.strftime('%Y-%m-%d')].first['title'])
+            .to eql city_events.second.title
+        end
       end
     end
 
@@ -47,9 +95,39 @@ RSpec.describe V1::EventsController, type: :controller do
 
       before { authenticate_user(user) }
 
-      it_behaves_like 'a create action' do
-        let(:entity_class) { 'Event' }
-        let(:invalid_params) { { title: 'short' } }
+      subject { post :create, params: params }
+
+      context 'with valid params' do
+        let(:params) { attributes_for(:event) }
+
+        it { is_expected.to have_http_status(:created) }
+        it 'creates event' do
+          subject
+
+          expect(json_success_status).to be_truthy
+          expect(json_data).to be_present
+          expect(Event.count).to eq(1)
+        end
+
+        it 'adds current user to participants' do
+          subject
+
+          expect(Event.last.participants.count).to eq(1)
+          expect(Event.last.participants_count).to eq(1)
+        end
+      end
+
+      context 'with invalid params' do
+        let(:params) { { title: 'short' } }
+
+        it { is_expected.to have_http_status(:unprocessable_entity) }
+        it 'does not create entity' do
+          subject
+
+          expect(json_success_status).to be_falsey
+          expect(json_errors).to be_present
+          expect(Event.count).to eq(0)
+        end
       end
     end
 
