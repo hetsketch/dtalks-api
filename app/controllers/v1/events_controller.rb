@@ -10,7 +10,7 @@ class V1::EventsController < ApplicationController
   end
 
   def index
-    @events = params[:status].present? ? Event.past : Event.upcoming
+    @events = params[:status].present? ? Event.past.includes([:author, :participants]) : Event.upcoming.includes([:author, :participants])
     @events = @events.city_events(params[:cities]) if params[:cities].present?
     @events = Event.group_by_day(@events)
   end
