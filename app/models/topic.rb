@@ -24,4 +24,5 @@ class Topic < ApplicationRecord
   # add comments
   # add comments counter
   is_impressionable(counter_cache: true)
+  acts_as_taggable
 end

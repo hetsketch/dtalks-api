@@ -52,6 +52,7 @@ gem 'omniauth-github'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-vkontakte'
 
+gem 'acts-as-taggable-on'
 gem 'dotenv-rails', groups: %i[development test production]
 gem 'impressionist'
 gem 'jbuilder'
