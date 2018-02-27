@@ -6,5 +6,7 @@ FactoryGirl.define do
     sequence(:text)  { |n| "#{n}#{Faker::Lorem.paragraphs}" }
 
     association :author, factory: :user
+
+    after(:create) { |topic| topic.update(tag_list: create_list(:tag, 5)) }
   end
 end
