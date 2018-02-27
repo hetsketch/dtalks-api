@@ -32,7 +32,7 @@ class V1::TopicsController < ApplicationController
   private
 
   def topic_params
-    params.permit(:title, :text, :tag_list)
+    params.permit(:title, :text, tag_list: [])
   end
 
   def topic
