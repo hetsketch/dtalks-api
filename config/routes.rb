@@ -20,6 +20,8 @@ Rails.application.routes.draw do
       resources :employees
     end
 
+    resources :tags, only: [:index]
+
     root to: 'welcome#index'
   end
 end
