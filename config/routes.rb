@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   namespace :v1 do
     mount_devise_token_auth_for 'User', at: 'auth', :controllers => { omniauth_callbacks: 'v1/users/omniauth_callbacks' }
 
-    # resources :users
+    resources :users, only: [:update]
 
     resources :topics do
       resources :comments, module: 'topics'

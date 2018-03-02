@@ -37,15 +37,18 @@ group :test do
   gem 'rails-controller-testing'
   gem 'rspec-collection_matchers'
   gem 'shoulda-matchers', git: 'https://github.com/thoughtbot/shoulda-matchers.git', branch: 'rails-5'
+  gem 'shrine-memory'
 end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
-gem 'carrierwave'
+gem 'aws-sdk-s3', '~> 1.2'
 gem 'devise_token_auth'
 gem 'email_validator'
+gem 'fastimage'
 gem 'mini_magick'
 gem 'pg'
+gem 'shrine'
 
 # OAuth providers
 gem 'omniauth-github'

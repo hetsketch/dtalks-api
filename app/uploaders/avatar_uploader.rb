@@ -1,20 +1,13 @@
 # frozen_string_literal: true
 
-class AvatarUploader < BaseUploader
-  process :crop_image
+class AvatarUploader < Shrine
+  plugin :validation_helpers
+  plugin :data_uri
+  plugin :store_dimensions
 
-  version :thumb do
-    process resize_to_fill: [50, 50]
-  end
-
-  def crop_image
-    return unless model.avatar_crop_x.present?
-    manipulate! do |img|
-      w = model.avatar_crop_w.to_i
-      h = model.avatar_crop_h.to_i
-      x = model.avatar_crop_x.to_i
-      y = model.avatar_crop_y.to_i
-      img.crop("#{w}x#{h}+#{x}+#{y}")
-    end
+  Attacher.validate do
+    validate_max_size 100 * 1024, message: "is too large (max is 100 Kb)"
+    validate_max_height 400
+    validate_max_width 400
   end
 end

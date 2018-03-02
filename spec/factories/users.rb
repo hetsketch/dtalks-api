@@ -6,5 +6,9 @@ FactoryGirl.define do
     sequence(:username) { |n| "#{Faker::Internet.user_name}#{n}" }
     password 'password'
     password_confirmation 'password'
+
+    trait :with_avatar do
+      avatar { File.open('spec/support/test_files/valid_avatar.jpg') }
+    end
   end
 end

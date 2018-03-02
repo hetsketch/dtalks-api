@@ -6,6 +6,7 @@ class User < ApplicationRecord
          :trackable, :validatable, :omniauthable,
          omniauth_providers: %i[github google_oauth2 vkontakte]
   include DeviseTokenAuth::Concerns::User
+  include AvatarUploader::Attachment.new(:avatar)
 
   # Scopes
 
@@ -31,9 +32,6 @@ class User < ApplicationRecord
   attr_accessor :avatar_crop_x, :avatar_crop_y, :avatar_crop_w, :avatar_crop_h
 
   # Callbacks
-
-  # Uploaders
-  mount_uploader :avatar, AvatarUploader
 
   class << self
     def create_with_omniauth(auth)

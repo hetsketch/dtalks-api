@@ -36,4 +36,41 @@ RSpec.describe User, type: :model do
   it { is_expected.to have_many(:participants) }
   it { is_expected.to have_many(:events).through(:participants) }
   it { is_expected.to belong_to(:company).counter_cache(:employees_count) }
+
+  describe 'avatar uploader' do
+    subject { user.valid? }
+
+    context 'with valid avatar' do
+      let(:user) { build(:user, :with_avatar) }
+
+      it 'validates avatar' do
+        subject
+
+        expect(user.errors).to be_empty
+      end
+    end
+
+    context 'when avatar size is more than 400x400' do
+      let(:avatar) { File.open('spec/support/test_files/big_width_avatar.jpeg') }
+      let(:user) { build(:user, avatar: avatar) }
+
+      it 'does not validate user' do
+        subject
+
+        expect(user.errors.messages[:avatar].include?('is too wide (max is 400 px)')).to be_truthy
+        expect(user.errors.messages[:avatar].include?('is too tall (max is 400 px)')).to be_truthy
+      end
+    end
+
+    context 'when size is more than 100kb' do
+      let(:avatar) { File.open('spec/support/test_files/big_size_avatar.jpg') }
+      let(:user) { build(:user, avatar: avatar) }
+
+      it 'does not validate user' do
+        subject
+
+        expect(user.errors.messages[:avatar].include?('is too large (max is 100 Kb)')).to be_truthy
+      end
+    end
+  end
 end
