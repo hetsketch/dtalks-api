@@ -37,31 +37,23 @@ ActiveRecord::Schema.define(version: 20180227150444) do
     t.index ["user_id"], name: "index_companies_on_user_id"
   end
 
-  create_table "employees", id: :serial, force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "company_id"
-    t.index ["company_id"], name: "index_employees_on_company_id"
-    t.index ["user_id"], name: "index_employees_on_user_id"
-  end
-
   create_table "events", id: :serial, force: :cascade do |t|
     t.string "title"
     t.string "text"
-    t.datetime "event_date"
-    t.integer "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.datetime "start_time", null: false
     t.datetime "end_time", null: false
-    t.string "photo"
-    t.integer "participants_count", default: 0
-    t.string "city"
-    t.string "address"
-    t.boolean "online", default: false
-    t.float "latitude"
-    t.float "longitude"
+    t.integer "user_id"
+    t.text "image_data"
     t.integer "price", default: 0
     t.boolean "free", default: false
+    t.boolean "online", default: false
+    t.string "city"
+    t.string "address"
+    t.float "latitude"
+    t.float "longitude"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "participants_count", default: 0
     t.integer "impressions_count", default: 0
     t.index ["user_id"], name: "index_events_on_user_id"
   end
@@ -152,6 +144,7 @@ ActiveRecord::Schema.define(version: 20180227150444) do
     t.string "position"
     t.string "city"
     t.string "bio"
+    t.text "avatar_data"
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "provider", default: "email", null: false
@@ -167,7 +160,6 @@ ActiveRecord::Schema.define(version: 20180227150444) do
     t.string "last_sign_in_ip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "avatar"
     t.bigint "company_id"
     t.index ["company_id"], name: "index_users_on_company_id"
     t.index ["email"], name: "index_users_on_email", unique: true
