@@ -19,7 +19,7 @@ class User < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :participants
   has_many :events, through: :participants, dependent: :destroy
-  belongs_to :company, counter_cache: :employees_count
+  belongs_to :company, counter_cache: :employees_count, optional: true
 
   # Validations
   validates :email, length: { in: 5..100 }
