@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class V1::UsersController < ApplicationController
-  before_action :authenticate_v1_user!
+  before_action :authenticate_v1_user!, only: [:update]
 
   def index
   end
@@ -22,6 +22,12 @@ class V1::UsersController < ApplicationController
     #
     # session[:user_id] = @user.id
     # redirect_to root_url, notice: 'Signed in!'
+  end
+
+  def update
+    @user = user
+    @user.update!(user_params)
+    render 'v1/users/show'
   end
 
   def destroy
