@@ -27,7 +27,7 @@ class User < ApplicationRecord
   validates :first_name, :last_name, :position, :city,
             length: { in: 2..100 }, allow_nil: true, allow_blank: true
   validates :bio, length: { in: 10..300 }, allow_nil: true, allow_blank: true
-
+  validates :links, url: true
   # Fields
   attr_accessor :avatar_crop_x, :avatar_crop_y, :avatar_crop_w, :avatar_crop_h
 

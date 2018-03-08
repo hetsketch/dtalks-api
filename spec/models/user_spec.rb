@@ -5,37 +5,60 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   let!(:user) { create(:user) }
 
-  # Presence
-  %i[email username].each do |field|
-    it { is_expected.to validate_presence_of(field) }
+  describe 'validations' do
+    # Presence
+    %i[email username].each do |field|
+      it { is_expected.to validate_presence_of(field) }
+    end
+
+    # Uniqueness
+    it { is_expected.to validate_uniqueness_of(:email).ignoring_case_sensitivity }
+    it { is_expected.to validate_uniqueness_of(:username) }
+
+    # Length
+    it { is_expected.to validate_length_of(:email).is_at_least(5) }
+    it { is_expected.to validate_length_of(:email).is_at_most(100) }
+    it { is_expected.to validate_length_of(:username).is_at_least(2) }
+    it { is_expected.to validate_length_of(:username).is_at_most(30) }
+
+    %i[first_name last_name position city].each do |field|
+      it { is_expected.to validate_length_of(field).is_at_least(2) }
+      it { is_expected.to validate_length_of(field).is_at_most(100) }
+    end
+
+    it { is_expected.to validate_length_of(:bio).is_at_least(10) }
+    it { is_expected.to validate_length_of(:bio).is_at_most(300) }
+
+    describe 'links' do
+      let(:user) { build(:user) }
+
+      context 'with valid links' do
+        it 'is valid' do
+          user.links << 'http://yourawesomeurl.com'
+          user.links << 'https://newawesomeurl.com'
+          expect(user).to be_valid
+        end
+      end
+
+      context 'with invalid links' do
+        it 'is invalid' do
+          user.links << 'http://yourawesomeurl.com'
+          user.links << 'just some text'
+          expect(user).not_to be_valid
+        end
+      end
+    end
   end
 
-  # Uniqueness
-  it { is_expected.to validate_uniqueness_of(:email).ignoring_case_sensitivity }
-  it { is_expected.to validate_uniqueness_of(:username) }
+  describe 'associations' do
+    %i[topics comments].each do |field|
+      it { is_expected.to have_many(field).dependent(:destroy) }
+    end
 
-  # Length
-  it { is_expected.to validate_length_of(:email).is_at_least(5) }
-  it { is_expected.to validate_length_of(:email).is_at_most(100) }
-  it { is_expected.to validate_length_of(:username).is_at_least(2) }
-  it { is_expected.to validate_length_of(:username).is_at_most(30) }
-
-  %i[first_name last_name position city].each do |field|
-    it { is_expected.to validate_length_of(field).is_at_least(2) }
-    it { is_expected.to validate_length_of(field).is_at_most(100) }
+    it { is_expected.to have_many(:participants) }
+    it { is_expected.to have_many(:events).through(:participants) }
+    it { is_expected.to belong_to(:company).counter_cache(:employees_count) }
   end
-
-  it { is_expected.to validate_length_of(:bio).is_at_least(10) }
-  it { is_expected.to validate_length_of(:bio).is_at_most(300) }
-
-  # Associations
-  %i[topics comments].each do |field|
-    it { is_expected.to have_many(field).dependent(:destroy) }
-  end
-
-  it { is_expected.to have_many(:participants) }
-  it { is_expected.to have_many(:events).through(:participants) }
-  it { is_expected.to belong_to(:company).counter_cache(:employees_count) }
 
   describe 'avatar uploader' do
     subject { user.valid? }
