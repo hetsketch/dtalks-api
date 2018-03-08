@@ -7,6 +7,8 @@ class V1::UsersController < ApplicationController
   end
 
   def show
+    @user = User.includes(:events, :comments, :topics, :company).find(params[:id])
+    render 'v1/users/user_profile'
   end
 
   def create
@@ -30,9 +32,13 @@ class V1::UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(
+    params.permit(
       :username, :email, :password, :password_confirmation, :remember_me,
       :first_name, :last_name, :address, :city, :bio, :avatar
     )
+  end
+
+  def user
+    User.find(params[:id])
   end
 end
