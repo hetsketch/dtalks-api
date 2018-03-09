@@ -30,3 +30,5 @@
 /.env.production
 examples.txt
 /docker/postgres-instance/data/*
+*.swo
+*.swp
