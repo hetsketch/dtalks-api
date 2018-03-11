@@ -7,7 +7,7 @@ RSpec.describe Company, type: :model do
     let!(:company) { create(:company) }
 
     # Presence
-    %i[name city info owner].each do |field|
+    %i[name city info owner logo].each do |field|
       it { is_expected.to validate_presence_of(field) }
     end
 
@@ -25,5 +25,37 @@ RSpec.describe Company, type: :model do
     # Associations
     it { is_expected.to belong_to(:owner).class_name('User').with_foreign_key('user_id') }
     it { is_expected.to have_many(:employees).class_name('User') }
+  end
+
+  describe 'logo uploader' do
+    subject { company }
+
+    context 'when logo valid' do
+      let(:company) { build(:company) }
+
+      it { is_expected.to be_valid }
+    end
+
+    context 'when logo size is more than 100kb' do
+      let(:big_image) { File.open('spec/support/test_files/big_size_avatar.jpg') }
+      let(:company) { build(:company, logo: big_image) }
+
+      it 'is invalid' do
+        expect(company).not_to be_valid
+        expect(company.errors).to be_present
+        expect(company.errors.messages[:logo]).to include('is too large (max is 100 Kb)')
+      end
+    end
+
+    context 'when logo dimensions is more than 300x300' do
+      let(:big_image) { File.open('spec/support/test_files/big_width_avatar.jpeg') }
+      let(:company) { build(:company, logo: big_image) }
+
+      it 'is invalid' do
+        expect(company).not_to be_valid
+        expect(company.errors).to be_present
+        expect(company.errors.messages[:logo]).to include('is too tall (max is 300 px)', 'is too wide (max is 300 px)')
+      end
+    end
   end
 end

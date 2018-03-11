@@ -5,6 +5,7 @@ FactoryGirl.define do
     sequence(:name) { |n| "#{Faker::Company.name} #{n}" }
     city Faker::Address.city
     info Faker::Lorem.paragraph
+    logo { File.open('spec/support/test_files/valid_company_logo.png') }
     owner
 
     factory :company_with_employees do
