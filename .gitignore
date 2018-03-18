@@ -32,3 +32,6 @@ examples.txt
 /docker/postgres-instance/data/*
 *.swo
 *.swp
+
+# Macfiles
+.DS_Store
