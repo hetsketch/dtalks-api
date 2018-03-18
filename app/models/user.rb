@@ -17,6 +17,7 @@ class User < ApplicationRecord
   # Associations
   has_many :topics, dependent: :destroy
   has_many :comments, dependent: :destroy
+  has_many :reviews, dependent: :destroy
   has_many :participants
   has_many :events, through: :participants, dependent: :destroy
   belongs_to :company, counter_cache: :employees_count, optional: true

@@ -2,10 +2,9 @@
 
 require 'image_processing/mini_magick'
 
-class LogoUploader < Shrine
+class CompanyPhotosUploader < Shrine
   include ImageProcessing::MiniMagick
 
-  LOGO_MAX_SIZE = 300
   THUMBNAIL_SIZE = 96
 
   plugin :processing
@@ -15,9 +14,7 @@ class LogoUploader < Shrine
   plugin :store_dimensions
 
   Attacher.validate do
-    validate_max_size 200 * 1024, message: "is too large (max is 200 Kb)"
-    validate_max_height LOGO_MAX_SIZE
-    validate_max_width LOGO_MAX_SIZE
+    validate_max_size 1000 * 1024, message: "is too large (max is 1 Mb)"
   end
 
   process :store do |io, context|

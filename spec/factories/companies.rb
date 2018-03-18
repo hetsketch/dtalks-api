@@ -6,6 +6,7 @@ FactoryGirl.define do
     city Faker::Address.city
     info Faker::Lorem.paragraph
     logo { File.open('spec/support/test_files/valid_company_logo.png') }
+    url Faker::Internet.url
     owner
 
     factory :company_with_employees do

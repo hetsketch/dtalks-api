@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180311093341) do
+ActiveRecord::Schema.define(version: 20180315071409) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,6 +35,10 @@ ActiveRecord::Schema.define(version: 20180311093341) do
     t.datetime "updated_at", null: false
     t.integer "employees_count", default: 0
     t.text "logo_data"
+    t.integer "vacancies_count", default: 0
+    t.integer "reviews_count", default: 0
+    t.string "url"
+    t.float "rating", default: 0.0, null: false
     t.index ["user_id"], name: "index_companies_on_user_id"
   end
 
@@ -98,6 +102,24 @@ ActiveRecord::Schema.define(version: 20180311093341) do
     t.datetime "updated_at", null: false
     t.index ["event_id"], name: "index_participants_on_event_id"
     t.index ["user_id"], name: "index_participants_on_user_id"
+  end
+
+  create_table "photos", force: :cascade do |t|
+    t.text "image_data"
+    t.bigint "company_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_photos_on_company_id"
+  end
+
+  create_table "reviews", force: :cascade do |t|
+    t.text "text", null: false
+    t.bigint "user_id"
+    t.bigint "company_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_reviews_on_company_id"
+    t.index ["user_id"], name: "index_reviews_on_user_id"
   end
 
   create_table "taggings", force: :cascade do |t|
@@ -169,7 +191,16 @@ ActiveRecord::Schema.define(version: 20180311093341) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  create_table "vacancies", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "company_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_vacancies_on_company_id"
+  end
+
   add_foreign_key "participants", "events"
   add_foreign_key "participants", "users"
+  add_foreign_key "photos", "companies"
   add_foreign_key "users", "companies"
 end

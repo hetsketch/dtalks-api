@@ -36,6 +36,6 @@ class V1::CompaniesController < ApplicationController
   end
 
   def company_params
-    params.permit(:name, :city, :info)
+    params.permit(:name, :city, :info, :logo_data_uri, :url, photos_attributes: [:image_data_uri])
   end
 end

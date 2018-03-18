@@ -7,7 +7,7 @@ RSpec.describe Company, type: :model do
     let!(:company) { create(:company) }
 
     # Presence
-    %i[name city info owner logo].each do |field|
+    %i[name city info owner logo rating].each do |field|
       it { is_expected.to validate_presence_of(field) }
     end
 
@@ -25,6 +25,8 @@ RSpec.describe Company, type: :model do
     # Associations
     it { is_expected.to belong_to(:owner).class_name('User').with_foreign_key('user_id') }
     it { is_expected.to have_many(:employees).class_name('User') }
+    it { is_expected.to have_many(:vacancies).dependent(:destroy) }
+    it { is_expected.to have_many(:reviews).dependent(:destroy) }
   end
 
   describe 'logo uploader' do
@@ -36,14 +38,14 @@ RSpec.describe Company, type: :model do
       it { is_expected.to be_valid }
     end
 
-    context 'when logo size is more than 100kb' do
+    context 'when logo size is more than 200kb' do
       let(:big_image) { File.open('spec/support/test_files/big_size_avatar.jpg') }
       let(:company) { build(:company, logo: big_image) }
 
       it 'is invalid' do
         expect(company).not_to be_valid
         expect(company.errors).to be_present
-        expect(company.errors.messages[:logo]).to include('is too large (max is 100 Kb)')
+        expect(company.errors.messages[:logo]).to include('is too large (max is 200 Kb)')
       end
     end
 

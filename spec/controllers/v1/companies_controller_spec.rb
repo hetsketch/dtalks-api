@@ -65,13 +65,36 @@ RSpec.describe V1::CompaniesController, type: :controller do
 
   describe 'POST #create' do
     context 'when user have permissions' do
+      subject { post :create, params: params }
+
       let(:user) { create(:user) }
 
       before { authenticate_user(user) }
 
-      it_behaves_like 'a create action' do
-        let(:entity_class) { 'Company' }
-        let(:invalid_params) { { name: 'A' } }
+      context 'with valid params' do
+        let(:params) { attributes_for(:company, logo_data_uri: "data:image/png;base64,#{Base64.encode64(open('spec/support/test_files/valid_company_logo.png').to_a.join)}") }
+
+        it { is_expected.to have_http_status(:created) }
+        it 'creates company' do
+          subject
+
+          expect(json_success_status).to be_truthy
+          expect(json_data).to be_present
+          expect(Company.count).to eq(1)
+        end
+      end
+
+      context 'with invalid params' do
+        let(:params) { { name: 'A' } }
+
+        it { is_expected.to have_http_status(:unprocessable_entity) }
+        it 'does not create entity' do
+          subject
+
+          expect(json_success_status).to be_falsey
+          expect(json_errors).to be_present
+          expect(Company.count).to eq(0)
+        end
       end
     end
 

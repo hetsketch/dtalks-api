@@ -5,8 +5,13 @@ class Company < ApplicationRecord
 
   belongs_to :owner, class_name: 'User', foreign_key: 'user_id'
   has_many :employees, class_name: 'User'
+  has_many :vacancies, dependent: :destroy
+  has_many :reviews, dependent: :destroy
 
-  validates :name, :city, :info, :owner, :logo, presence: true
+  has_many :photos, dependent: :destroy
+  accepts_nested_attributes_for :photos
+
+  validates :name, :city, :info, :owner, :logo, :rating, presence: true
   validates :name, uniqueness: true, length: { in: 2..50 }
   validates :city, length: { in: 2..50 }
   validates :info, length: { maximum: 3000 }
