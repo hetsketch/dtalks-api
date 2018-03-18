@@ -3,8 +3,8 @@ require 'shrine'
 if Rails.env.development?
   require 'shrine/storage/file_system'
   Shrine.storages = {
-    cache: Shrine::Storage::FileSystem.new('public', prefix: 'uploads/cache'),
-    store: Shrine::Storage::FileSystem.new('public', prefix: 'uploads/store')
+    cache: Shrine::Storage::FileSystem.new('public', host: 'http://localhost:3000', prefix: 'uploads/cache'),
+    store: Shrine::Storage::FileSystem.new('public', host: 'http://localhost:3000', prefix: 'uploads/store')
   }
 elsif Rails.env.test?
   require 'shrine/storage/memory'
