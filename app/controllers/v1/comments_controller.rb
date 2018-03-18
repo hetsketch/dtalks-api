@@ -24,7 +24,6 @@ class V1::CommentsController < ApplicationController
 
   def index
     @comments = @commentable.comments.includes(:author)
-    render 'v1/topics/comments/index'
   end
 
   private

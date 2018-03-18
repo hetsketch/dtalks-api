@@ -14,6 +14,7 @@ Rails.application.routes.draw do
       collection do
         resources :cities, only: [:index], module: 'events'
       end
+      resources :comments, module: 'events'
     end
 
     resources :companies do
