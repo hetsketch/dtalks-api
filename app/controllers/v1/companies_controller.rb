@@ -8,11 +8,11 @@ class V1::CompaniesController < ApplicationController
   end
 
   def show
-    @company = company
+    @company = company(params[:id])
   end
 
   def update
-    @company = company
+    @company = company(params[:id])
     @company.update!(company_params)
     render 'v1/companies/show'
   end
@@ -25,14 +25,14 @@ class V1::CompaniesController < ApplicationController
   end
 
   def destroy
-    company.destroy
+    company(params[:id]).destroy
     render json: { success: true }, status: :ok
   end
 
   private
 
-  def company
-    Company.find(params[:id])
+  def company(id)
+    Company.find(id)
   end
 
   def company_params
