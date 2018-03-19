@@ -12,8 +12,7 @@ class Event < ApplicationRecord
   # Associations
   has_many :participants
   has_many :users, through: :participants
-  # TODO: add comments to events
-  # has_many :comments, as: :commentable, dependent: :destroy
+  has_many :comments, as: :commentable, dependent: :destroy
   belongs_to :author, class_name: 'User', foreign_key: 'user_id'
 
   # Validations

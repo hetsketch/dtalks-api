@@ -26,6 +26,7 @@ RSpec.describe Event, type: :model do
     # Associations
     it { is_expected.to belong_to(:author).class_name('User').with_foreign_key('user_id') }
     it { is_expected.to have_many(:participants) }
+    it { is_expected.to have_many(:comments).dependent(:destroy) }
     it { is_expected.to have_many(:users).through(:participants) }
   end
 

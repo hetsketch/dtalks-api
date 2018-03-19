@@ -13,17 +13,17 @@ class V1::CommentsController < ApplicationController
   end
 
   def update
-    comment.update!(comment_params)
+    @comment = comment(params[:id])
+    @comment.update!(comment_params)
   end
 
   def destroy
-    comment&.destroy!
+    comment(params[:id]).destroy!
     render json: { success: true }, status: :ok
   end
 
   def index
     @comments = @commentable.comments.includes(:author)
-    render 'v1/topics/comments/index'
   end
 
   private
@@ -32,7 +32,7 @@ class V1::CommentsController < ApplicationController
     params.permit(:text)
   end
 
-  def comment
-    @comment ||= Comment.find(params[:id])
+  def comment(id)
+    Comment.find(id)
   end
 end
