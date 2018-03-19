@@ -3,6 +3,7 @@
 json.extract!(user, :id, :username, :email, :first_name, :last_name, :full_name, :position, :bio, :city)
 if user.avatar.present?
   json.avatar do
-    json.data_uri user.avatar.data_uri
+    json.original  user.avatar[:original].url
+    json.thumbnail user.avatar[:thumbnail].url
   end
 end
