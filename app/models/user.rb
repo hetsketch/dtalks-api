@@ -5,6 +5,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :recoverable, :rememberable,
          :trackable, :validatable, :omniauthable,
          omniauth_providers: %i[github google_oauth2 vkontakte]
+  rolify
   include DeviseTokenAuth::Concerns::User
   include AvatarUploader::Attachment.new(:avatar)
 
@@ -33,6 +34,7 @@ class User < ApplicationRecord
   attr_accessor :avatar_crop_x, :avatar_crop_y, :avatar_crop_w, :avatar_crop_h
 
   # Callbacks
+  after_create :assign_default_role
 
   class << self
     def create_with_omniauth(auth)
@@ -63,10 +65,10 @@ class User < ApplicationRecord
       user.first_name = auth.info.first_name
       user.last_name = auth.info.last_name
       user.username = if auth.extra.screen_name
-                        auth.extra.screen_name
-                      else
-                        user.first_name[0].upcase + user.last_name[0].upcase
-                      end
+        auth.extra.screen_name
+      else
+        user.first_name[0].upcase + user.last_name[0].upcase
+      end
     end
 
     def with_github(user, auth)
@@ -81,5 +83,11 @@ class User < ApplicationRecord
 
   def full_name
     "#{first_name} #{last_name}"
+  end
+
+  private
+
+  def assign_default_role
+    self.add_role(:user) if self.roles.blank?
   end
 end
