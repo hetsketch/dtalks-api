@@ -11,5 +11,9 @@ module ExceptionHandler
     rescue_from ActiveRecord::RecordInvalid do |ex|
       render_unprocessable(ex)
     end
+
+    rescue_from Pundit::NotAuthorizedError do |ex|
+      render_forbidden(ex)
+    end
   end
 end

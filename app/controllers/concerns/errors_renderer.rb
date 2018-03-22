@@ -9,6 +9,10 @@ module ErrorsRenderer
     render_json_errors(exception.record.errors, :unprocessable_entity)
   end
 
+  def render_forbidden(exception)
+    render_json_errors(["You don't have permissions do do this."], :forbidden)
+  end
+
   private
 
   def render_json_errors(errors, status)

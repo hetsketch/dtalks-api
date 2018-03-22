@@ -4,6 +4,7 @@ class ApplicationController < ActionController::API
   include DeviseTokenAuth::Concerns::SetUserByToken
   include ErrorsRenderer
   include ExceptionHandler
+  include Pundit
 
   before_action :configure_permitted_parameters, if: :devise_controller?
 
@@ -12,6 +13,11 @@ class ApplicationController < ActionController::API
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up, keys: [:username])
   end
+
+  def pundit_user
+    current_v1_user
+  end
+
   #
   #   devise_parameter_sanitizer.permit(:sign_in) do |user|
   #     user.permit(:email, :password, :remember_me)
