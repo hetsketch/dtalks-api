@@ -96,4 +96,24 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe 'callbacks' do
+    describe '#assign_default_role' do
+      context 'when new user created' do
+        let(:user) { build(:user) }
+
+        it 'sets user role to new user' do
+          user.save
+          expect(user.has_role?(:user)).to be_truthy
+        end
+      end
+    end
+  end
+
+  describe '#add_admin_role' do
+    it 'adds admin role to user' do
+      user.add_admin_role
+      expect(user.has_role?(:admin)).to be_truthy
+    end
+  end
 end

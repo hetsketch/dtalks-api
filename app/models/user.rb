@@ -12,7 +12,7 @@ class User < ApplicationRecord
   # Scopes
 
   # Constants
-
+  ROLES = { user: :user, admin: :admin }
   # Enums
 
   # Associations
@@ -85,9 +85,13 @@ class User < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
+  def add_admin_role
+    add_role(ROLES[:admin])
+  end
+
   private
 
   def assign_default_role
-    self.add_role(:user) if self.roles.blank?
+    add_role(ROLES[:user]) if roles.blank?
   end
 end
