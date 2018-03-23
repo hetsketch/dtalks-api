@@ -90,22 +90,37 @@ RSpec.describe V1::TopicsController, type: :controller do
 
     subject { put :update, params: topic_params }
 
-    context 'when user have permissions' do
+    context 'when user authenticated' do
       let(:user) { create(:user) }
 
       before { authenticate_user(user) }
 
-      it { is_expected.to have_http_status(:ok) }
-      it 'updates existing topic' do
-        subject
+      context 'when user have permissions' do
+        let(:user) { topic.author }
 
-        expect(json_success_status).to be_truthy
-        expect(json_data).not_to be_empty
-        expect(json_data['title']).to eq('N' * 10)
+        it { is_expected.to have_http_status(:ok) }
+        it 'updates existing topic' do
+          subject
+
+          expect(json_success_status).to be_truthy
+          expect(json_data).not_to be_empty
+          expect(json_data['title']).to eq('N' * 10)
+        end
+      end
+
+      context 'when user does not have permissions' do
+        it { is_expected.to have_http_status(:forbidden) }
+        it 'does not update existing topic' do
+          subject
+
+          expect(json_success_status).to be_falsey
+          expect(json_errors).to be_present
+          expect(json_errors).to include(/You don't have permissions do do this/)
+        end
       end
     end
 
-    context 'when user does not have permissions' do
+    context 'when user does not authenticated' do
       it 'return authentication error' do
         subject
 
@@ -122,21 +137,36 @@ RSpec.describe V1::TopicsController, type: :controller do
 
     subject { delete :destroy, params: topic_params }
 
-    context 'when user have permissions' do
+    context 'when user authenticated' do
       let(:user) { create(:user) }
 
       before { authenticate_user(user) }
 
-      it { is_expected.to have_http_status(:ok) }
-      it 'deletes existing topic' do
-        subject
+      context 'when user have permissions' do
+        let(:user) { topic.author }
 
-        expect(json_success_status).to be_truthy
-        expect(Topic.count).to eq(0)
+        it { is_expected.to have_http_status(:ok) }
+        it 'deletes existing topic' do
+          subject
+
+          expect(json_success_status).to be_truthy
+          expect(Topic.count).to eq(0)
+        end
+      end
+
+      context 'when user does not have permissions' do
+        it { is_expected.to have_http_status(:forbidden) }
+        it 'does not delete existing topic' do
+          subject
+
+          expect(json_success_status).to be_falsey
+          expect(json_errors).to be_present
+          expect(json_errors).to include(/You don't have permissions do do this./)
+        end
       end
     end
 
-    context 'when user does not have permissions' do
+    context 'when user does not authenticated' do
       it 'return authentication error' do
         subject
 

@@ -10,22 +10,28 @@ class V1::TopicsController < ApplicationController
 
   def show
     @topic = Topic.includes(comments: [:author]).find(params[:id])
+    authorize @topic
   end
 
   def create
     @topic = Topic.new(topic_params)
     @topic.author = current_v1_user
+    authorize @topic
     @topic.save!
     render status: :created
   end
 
   def update
-    topic.update!(topic_params)
+    @topic = topic(params[:id])
+    authorize @topic
+    @topic.update!(topic_params)
     render 'v1/topics/show'
   end
 
   def destroy
-    topic&.destroy
+    @topic = topic(params[:id])
+    authorize @topic
+    @topic.destroy
     render json: { success: true }, status: :ok
   end
 
@@ -35,7 +41,7 @@ class V1::TopicsController < ApplicationController
     params.permit(:title, :text, tag_list: [])
   end
 
-  def topic
-    @topic ||= Topic.find(params[:id])
+  def topic(id)
+    Topic.find(id)
   end
 end

@@ -10,5 +10,15 @@ FactoryGirl.define do
     trait :with_avatar do
       avatar { File.open('spec/support/test_files/valid_avatar.jpg') }
     end
+
+    trait :admin do
+      after(:build) do |user|
+        user.add_role(:admin)
+      end
+    end
+
+    after(:build) do |user|
+      user.add_role(:user)
+    end
   end
 end
