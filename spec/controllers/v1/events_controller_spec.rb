@@ -139,37 +139,54 @@ RSpec.describe V1::EventsController, type: :controller do
   end
 
   describe 'PUT #update' do
-    let(:author) { create(:user) }
-    let!(:event) { create(:event, author: author) }
+    let(:user) { create(:user) }
+    let!(:event) { create(:event) }
 
     subject { put :update, params: params }
 
     context 'when user authenticated' do
-      before { authenticate_user(author) }
+      before { authenticate_user(user) }
 
-      context 'with valid params' do
-        let(:params) { { id: event.id, title: 'new title' } }
+      context 'when user has permissions' do
+        let(:user) { event.author }
 
-        it_behaves_like 'a success request'
-        it 'updates event' do
-          subject
+        context 'with valid params' do
+          let(:params) { { id: event.id, title: 'new title' } }
 
-          expect(json_success_status).to be_truthy
-          expect(json_data).to be_present
-          expect(json_data['title']).to eql('new title')
+          it_behaves_like 'a success request'
+          it 'updates event' do
+            subject
+
+            expect(json_success_status).to be_truthy
+            expect(json_data).to be_present
+            expect(json_data['title']).to eql('new title')
+          end
+        end
+
+        context 'with invalid params' do
+          let(:params) { { id: event.id, text: '' } }
+
+          it { is_expected.to have_http_status(:unprocessable_entity) }
+          it 'returns validation errors' do
+            subject
+
+            expect(json_success_status).to be_falsey
+            expect(json_errors).to be_present
+            expect(Event.find(event.id).text).to_not eq('')
+          end
         end
       end
 
-      context 'with invalid params' do
-        let(:params) { { id: event.id, text: '' } }
+      context 'when user does not have permissions' do
+        let(:params) { { id: event.id, title: 'new title' } }
 
-        it { is_expected.to have_http_status(:unprocessable_entity) }
-        it 'returns validation errors' do
+        it { is_expected.to have_http_status(:forbidden) }
+        it 'does not update existing topic' do
           subject
 
           expect(json_success_status).to be_falsey
           expect(json_errors).to be_present
-          expect(Event.find(event.id).text).to_not eq('')
+          expect(json_errors).to include(/You don't have permissions do do this/)
         end
       end
     end

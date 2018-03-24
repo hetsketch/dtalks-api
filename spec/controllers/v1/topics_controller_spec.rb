@@ -74,7 +74,7 @@ RSpec.describe V1::TopicsController, type: :controller do
     context 'when user does not have permissions' do
       let(:topic_params) { attributes_for(:topic) }
 
-      it 'return authentication error' do
+      it 'returns authentication error' do
         subject
 
         expect(json_success_status).to be_falsey

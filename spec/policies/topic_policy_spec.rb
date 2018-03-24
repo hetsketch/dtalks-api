@@ -10,7 +10,7 @@ RSpec.describe TopicPolicy do
   let(:simple_user) { build(:user) }
   let(:topic) { build(:topic, author: author) }
 
-  permissions :update?, :delete? do
+  permissions :update?, :destroy? do
     it 'grants access if user is author of topic' do
       expect(subject).to permit(author, topic)
     end

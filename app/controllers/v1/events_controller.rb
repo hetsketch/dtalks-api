@@ -5,7 +5,7 @@ class V1::EventsController < ApplicationController
   impressionist action: [:show]
 
   def show
-    @event = event
+    @event = event(params[:id])
     render 'v1/events/event'
   end
 
@@ -16,18 +16,22 @@ class V1::EventsController < ApplicationController
   end
 
   def update
-    @event = event
+    @event = event(params[:id])
+    authorize @event
     @event.update!(event_params)
     render 'v1/events/event'
   end
 
   def destroy
-    event.destroy
+    @event = event(params[:id])
+    authorize @event
+    @event.destroy
     render json: { success: true }, status: :ok
   end
 
   def create
     @event = Event.new(event_params)
+    authorize @event
     @event.author = current_v1_user
     @event.participants.build(user: current_v1_user, event: @event)
     @event.save!
@@ -41,7 +45,7 @@ class V1::EventsController < ApplicationController
                   :longitude, :price, :free)
   end
 
-  def event
-    Event.find(params[:id])
+  def event(id)
+    Event.find(id)
   end
 end
