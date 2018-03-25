@@ -17,15 +17,15 @@ class ApplicationPolicy
   end
 
   def create?
-    false
+    @user.admin?
   end
 
   def update?
-    false
+    @user.admin?
   end
 
   def destroy?
-    false
+    @user.admin?
   end
 
   def scope

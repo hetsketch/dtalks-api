@@ -89,6 +89,10 @@ class User < ApplicationRecord
     add_role(ROLES[:admin])
   end
 
+  def admin?
+    has_role?(ROLES[:admin])
+  end
+
   private
 
   def assign_default_role
