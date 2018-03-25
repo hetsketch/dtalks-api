@@ -7,6 +7,7 @@ class V1::CommentsController < ApplicationController
     @comment = Comment.new(comment_params)
     @comment.commentable = @commentable
     @comment.author = current_v1_user
+    authorize @comment
 
     @comment.save!
     render status: :created
@@ -14,11 +15,14 @@ class V1::CommentsController < ApplicationController
 
   def update
     @comment = comment(params[:id])
+    authorize @comment
     @comment.update!(comment_params)
   end
 
   def destroy
-    comment(params[:id]).destroy!
+    @comment = comment(params[:id])
+    authorize @comment
+    @comment.destroy!
     render json: { success: true }, status: :ok
   end
 

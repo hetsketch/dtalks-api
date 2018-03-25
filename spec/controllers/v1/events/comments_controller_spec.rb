@@ -57,24 +57,36 @@ RSpec.describe V1::Events::CommentsController, type: :controller do
 
     subject { put :update, params: params }
 
-    context 'when user authenticate' do
-      before do
-        authenticate_user(user)
+    context 'when user authenticated' do
+      before { authenticate_user(user) }
+
+      context 'when user has permissions' do
+        let(:user) { comment.author }
+
+        it { is_expected.to have_http_status(:ok) }
+        it 'updates comment' do
+          subject
+
+          expect(json_success_status).to be_truthy
+          expect(json_data['text']).to eql('new text')
+        end
       end
 
-      # TODO: only author or admin is able to modify comment
-      it { is_expected.to have_http_status(:ok) }
-      it 'updates comment' do
-        subject
+      context 'when user does not have permissions' do
+        it { is_expected.to have_http_status(:forbidden) }
+        it 'does not update comment' do
+          subject
 
-        expect(json_success_status).to be_truthy
-        expect(json_data['text']).to eql('new text')
+          expect(json_success_status).to be_falsey
+          expect(json_errors).not_to be_empty
+          expect(json_errors).to include(/You don't have permissions do do this/)
+        end
       end
     end
 
     context 'when user does not authenticate' do
       it { is_expected.to have_http_status(:unauthorized) }
-      it 'does not create a comment' do
+      it 'does not update comment' do
         subject
 
         expect(json_success_status).to be_falsey
@@ -89,30 +101,44 @@ RSpec.describe V1::Events::CommentsController, type: :controller do
 
     subject { delete :destroy, params: params }
 
-    context 'when user authenticate' do
+    context 'when user authenticated' do
       before { authenticate_user(user) }
 
-      context 'when comment exists' do
-        # TODO: only author or admin is able to remove comment
-        it { is_expected.to have_http_status(:ok) }
-        it 'deletes comment' do
-          subject
+      context 'when user has permissions' do
+        let(:user) { comment.author }
 
-          expect(json_success_status).to be_truthy
-          expect(event.comments.count).to eql(0)
-          expect(event.reload.comments_count).to eql(0)
+        context 'when comment exists' do
+          it { is_expected.to have_http_status(:ok) }
+          it 'deletes comment' do
+            subject
+
+            expect(json_success_status).to be_truthy
+            expect(event.comments.count).to eql(0)
+            expect(event.reload.comments_count).to eql(0)
+          end
+        end
+
+        context 'when comment does not exist' do
+          let(:params) { { id: 18_650, event_id: event.id } }
+
+          it { is_expected.to have_http_status(:not_found) }
+          it 'does not delete comment' do
+            subject
+
+            expect(json_success_status).to be_falsey
+            expect(json_errors).to_not be_empty
+          end
         end
       end
 
-      context 'when comment does not exist' do
-        let(:params) { { id: 18_650, event_id: event.id } }
-
-        it { is_expected.to have_http_status(:not_found) }
-        it 'does not delete comment' do
+      context 'when user does not have permissions' do
+        it { is_expected.to have_http_status(:forbidden) }
+        it 'does not delete the comment' do
           subject
 
-          expect(json_success_status).to be_falsey
+          expect(json_success_status).to be_falsy
           expect(json_errors).to_not be_empty
+          expect(json_errors).to include(/You don't have permissions do do this/)
         end
       end
     end
