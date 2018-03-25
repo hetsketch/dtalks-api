@@ -41,24 +41,38 @@ RSpec.describe V1::CompaniesController, type: :controller do
   describe 'PUT #update' do
     let!(:company) { create(:company) }
     let(:company_params) { { id: company.id, name: 'N' * 10 } }
+    let(:user) { create(:user) }
 
     subject { put :update, params: company_params }
 
-    context 'when user have permissions' do
-      let(:user) { create(:user) }
-
+    context 'when user authenticated' do
       before { authenticate_user(user) }
 
-      it_behaves_like 'a success request'
-      it 'updates existing topic' do
-        subject
+      context 'when user has permissions' do
+        let(:user) { company.owner }
 
-        expect(json_data).not_to be_empty
-        expect(json_data['name']).to eq('N' * 10)
+        it_behaves_like 'a success request'
+        it 'updates existing company' do
+          subject
+
+          expect(json_data).not_to be_empty
+          expect(json_data['name']).to eq('N' * 10)
+        end
+      end
+
+      context 'when user does not have permissions' do
+        it { is_expected.to have_http_status(:forbidden) }
+        it 'does not update the company' do
+          subject
+
+          expect(json_success_status).to be_falsy
+          expect(json_errors).to be_present
+          expect(json_errors).to include(/You don't have permissions do do this/)
+        end
       end
     end
 
-    context 'when user does not have permissions' do
+    context 'when user is not authenticated' do
       it_behaves_like 'an unauthenticated user'
     end
   end
@@ -111,16 +125,32 @@ RSpec.describe V1::CompaniesController, type: :controller do
 
     subject { delete :destroy, params: company_params }
 
-    context 'when user have permissions' do
+    context 'when user authenticated' do
       let(:user) { create(:user) }
 
       before { authenticate_user(user) }
 
-      it_behaves_like 'a success request'
-      it 'deletes existing company' do
-        subject
+      context 'when user has permissions' do
+        let(:user) { company.owner }
 
-        expect(Company.count).to eq(0)
+        it_behaves_like 'a success request'
+        it 'deletes existing company' do
+          subject
+
+          expect(json_success_status).to be_truthy
+          expect(Company.count).to eq(0)
+        end
+      end
+
+      context 'when user does not have permissions' do
+        it { is_expected.to have_http_status(:forbidden) }
+        it 'does not delete the company' do
+          subject
+
+          expect(json_success_status).to be_falsy
+          expect(json_errors).to be_present
+          expect(json_errors).to include(/You don't have permissions do do this/)
+        end
       end
     end
 

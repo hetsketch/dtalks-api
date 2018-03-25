@@ -13,6 +13,7 @@ class V1::CompaniesController < ApplicationController
 
   def update
     @company = company(params[:id])
+    authorize @company
     @company.update!(company_params)
     render 'v1/companies/show'
   end
@@ -20,12 +21,15 @@ class V1::CompaniesController < ApplicationController
   def create
     @company = Company.new(company_params)
     @company.owner = current_v1_user
+    authorize @company
     @company.save!
     render status: :created
   end
 
   def destroy
-    company(params[:id]).destroy
+    @company = company(params[:id])
+    authorize @company
+    @company.destroy!
     render json: { success: true }, status: :ok
   end
 
