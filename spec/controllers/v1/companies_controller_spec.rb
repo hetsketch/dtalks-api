@@ -4,12 +4,13 @@ require 'rails_helper'
 
 RSpec.describe V1::CompaniesController, type: :controller do
   describe 'GET #index' do
-    subject { get :index }
+    subject { get :index, params: params }
+    let(:params) { {} }
 
     context 'when companies exist' do
-      let!(:company_1) { create(:company_with_employees, employees_count: 1) }
-      let!(:company_2) { create(:company_with_employees, employees_count: 2) }
-      let!(:company_3) { create(:company_with_employees, employees_count: 3) }
+      let!(:company_1) { create(:company_with_employees, employees_count: 1, rating: 3, vacancies_count: 2) }
+      let!(:company_2) { create(:company_with_employees, employees_count: 2, rating: 2, vacancies_count: 1) }
+      let!(:company_3) { create(:company_with_employees, employees_count: 3, rating: 1, vacancies_count: 3) }
 
       it_behaves_like 'a success request'
       it 'returns companies ordered by number of employees' do
@@ -19,6 +20,30 @@ RSpec.describe V1::CompaniesController, type: :controller do
         expect(json_data[0]['id']).to eq(company_3.id)
         expect(json_data[1]['id']).to eq(company_2.id)
         expect(json_data[2]['id']).to eq(company_1.id)
+      end
+
+      context 'when filter sets to `rating`' do
+        let(:params) { { order_by: 'rating' } }
+
+        it 'returns companies ordered by rating' do
+          subject
+
+          expect(json_data[0]['id']).to eq(company_1.id)
+          expect(json_data[1]['id']).to eq(company_2.id)
+          expect(json_data[2]['id']).to eq(company_3.id)
+        end
+      end
+
+      context 'when filter sets to `vacancies`' do
+        let(:params) { { order_by: 'vacancies' } }
+
+        it 'returns companies ordered by vacancies' do
+          subject
+
+          expect(json_data[0]['id']).to eq(company_3.id)
+          expect(json_data[1]['id']).to eq(company_1.id)
+          expect(json_data[2]['id']).to eq(company_2.id)
+        end
       end
     end
 

@@ -4,7 +4,7 @@ class V1::CompaniesController < ApplicationController
   before_action :authenticate_v1_user!, except: [:show, :index]
 
   def index
-    @companies = Company.order(employees_count: :desc)
+    @companies = Company.order_by(params[:order_by])
   end
 
   def show

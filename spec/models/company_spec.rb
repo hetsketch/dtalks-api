@@ -60,4 +60,52 @@ RSpec.describe Company, type: :model do
       end
     end
   end
+
+  describe '.order_by' do
+    subject { Company.order_by(value) }
+
+    let(:company1) { create(:company_with_employees, employees_count: 1, rating: 3, vacancies_count: 2) }
+    let(:company2) { create(:company_with_employees, employees_count: 2, rating: 2, vacancies_count: 3) }
+    let(:company3) { create(:company_with_employees, employees_count: 3, rating: 1, vacancies_count: 1) }
+
+    context 'when value is `rating`' do
+      let(:value) { 'rating' }
+
+      it 'returns companies ordered by rating' do
+        expect(subject).to eq [company1, company2, company3]
+      end
+    end
+
+    context 'when value is `employees`' do
+      let(:value) { 'employees' }
+
+      it 'returns companies ordered by employees' do
+        expect(subject).to eq [company3, company2, company1]
+      end
+    end
+
+    context 'when value is `vacancies`' do
+      let(:value) { 'vacancies' }
+
+      it 'returns companies ordered by vacancies' do
+        expect(subject).to eq [company2, company1, company3]
+      end
+    end
+
+    context 'when value is nil' do
+      let(:value) { nil }
+
+      it 'returns companies ordered by employees' do
+        expect(subject).to eq [company3, company2, company1]
+      end
+    end
+
+    context 'when value is anything else' do
+      let(:value) { 'abra' }
+
+      it 'returns companies ordered by employees' do
+        expect(subject).to eq [company3, company2, company1]
+      end
+    end
+  end
 end

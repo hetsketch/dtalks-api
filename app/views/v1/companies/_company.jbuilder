@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-json.extract!(company, :id, :name, :city, :info, :url, :employees_count, :vacancies_count, :reviews_count)
+json.extract!(company, :id, :name, :city, :info, :url, :employees_count, :vacancies_count, :reviews_count, :rating)
 if company.logo.present?
   json.logo company.logo[:original].url
   json.thumb company.logo[:thumbnail].url
