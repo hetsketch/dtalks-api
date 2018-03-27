@@ -8,7 +8,7 @@ RSpec.describe V1::CompaniesController, type: :controller do
     let(:params) { {} }
 
     context 'when companies exist' do
-      let!(:company_1) { create(:company_with_employees, employees_count: 1, rating: 3, vacancies_count: 2) }
+      let!(:company_1) { create(:company_with_employees, name: 'DTalks', employees_count: 1, rating: 3, vacancies_count: 2) }
       let!(:company_2) { create(:company_with_employees, employees_count: 2, rating: 2, vacancies_count: 1) }
       let!(:company_3) { create(:company_with_employees, employees_count: 3, rating: 1, vacancies_count: 3) }
 
@@ -43,6 +43,17 @@ RSpec.describe V1::CompaniesController, type: :controller do
           expect(json_data[0]['id']).to eq(company_3.id)
           expect(json_data[1]['id']).to eq(company_1.id)
           expect(json_data[2]['id']).to eq(company_2.id)
+        end
+      end
+
+      context 'when search param present' do
+        let(:params) { { q: 'dtalks' } }
+
+        it 'returns companies with corresponded name' do
+          subject
+
+          expect(json_data.length).to eq(1)
+          expect(json_data[0]['id']).to eq(company_1.id)
         end
       end
     end

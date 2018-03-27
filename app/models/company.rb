@@ -27,4 +27,9 @@ class Company < ApplicationRecord
     return order(ORDER_MAPPINGS['employees']) if value.blank? || !ORDER_MAPPINGS.key?(value)
     order(ORDER_MAPPINGS[value])
   end
+
+  def self.search(query)
+    return all if query.blank?
+    where('LOWER (name) LIKE LOWER(?)', "%#{query}%")
+  end
 end
