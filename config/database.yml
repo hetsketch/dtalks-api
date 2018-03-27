@@ -21,4 +21,6 @@ test:
 
 production:
   <<: *default
-  database: myapp_production
+  database: dtalks_production
+  username: dtalks
+  password: <%= ENV['DATABASE_PASSWORD'] %>
