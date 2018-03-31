@@ -2,10 +2,8 @@
 
 json.author do
   json.extract!(author, :id, :full_name, :username, :position)
-  if author.avatar.present?
-    json.avatar do
-      json.original  author.avatar[:original].url
-      json.thumbnail author.avatar[:thumbnail].url
-    end
+  json.avatar do
+    json.original avatar_url(author)
+    json.thumbnail avatar_url(author, size: :thumbnail)
   end
 end
