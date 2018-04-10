@@ -4,7 +4,7 @@ class V1::CompaniesController < ApplicationController
   before_action :authenticate_v1_user!, except: [:show, :index]
 
   def index
-    @companies = Company.search(params[:q]).order_by(params[:order_by])
+    @companies = Company.search(params[:q]).order_by(params[:order_by]).page(params[:page])
   end
 
   def show

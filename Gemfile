@@ -60,6 +60,7 @@ gem 'acts-as-taggable-on'
 gem 'dotenv-rails', groups: %i[development test production]
 gem 'impressionist'
 gem 'jbuilder'
+gem 'kaminari'
 gem 'pundit'
 gem 'rack-cors'
 gem 'rails-i18n', '~> 5.0.0'

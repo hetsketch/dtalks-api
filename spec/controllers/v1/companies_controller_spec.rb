@@ -16,10 +16,10 @@ RSpec.describe V1::CompaniesController, type: :controller do
       it 'returns companies ordered by number of employees' do
         subject
 
-        expect(json_data.length).to eq(3)
-        expect(json_data[0]['id']).to eq(company_3.id)
-        expect(json_data[1]['id']).to eq(company_2.id)
-        expect(json_data[2]['id']).to eq(company_1.id)
+        expect(json_data['companies'].length).to eq(3)
+        expect(json_data['companies'][0]['id']).to eq(company_3.id)
+        expect(json_data['companies'][1]['id']).to eq(company_2.id)
+        expect(json_data['companies'][2]['id']).to eq(company_1.id)
       end
 
       context 'when filter sets to `rating`' do
@@ -28,9 +28,9 @@ RSpec.describe V1::CompaniesController, type: :controller do
         it 'returns companies ordered by rating' do
           subject
 
-          expect(json_data[0]['id']).to eq(company_1.id)
-          expect(json_data[1]['id']).to eq(company_2.id)
-          expect(json_data[2]['id']).to eq(company_3.id)
+          expect(json_data['companies'][0]['id']).to eq(company_1.id)
+          expect(json_data['companies'][1]['id']).to eq(company_2.id)
+          expect(json_data['companies'][2]['id']).to eq(company_3.id)
         end
       end
 
@@ -40,9 +40,9 @@ RSpec.describe V1::CompaniesController, type: :controller do
         it 'returns companies ordered by vacancies' do
           subject
 
-          expect(json_data[0]['id']).to eq(company_3.id)
-          expect(json_data[1]['id']).to eq(company_1.id)
-          expect(json_data[2]['id']).to eq(company_2.id)
+          expect(json_data['companies'][0]['id']).to eq(company_3.id)
+          expect(json_data['companies'][1]['id']).to eq(company_1.id)
+          expect(json_data['companies'][2]['id']).to eq(company_2.id)
         end
       end
 
@@ -52,8 +52,8 @@ RSpec.describe V1::CompaniesController, type: :controller do
         it 'returns companies with corresponded name' do
           subject
 
-          expect(json_data.length).to eq(1)
-          expect(json_data[0]['id']).to eq(company_1.id)
+          expect(json_data['companies'].length).to eq(1)
+          expect(json_data['companies'][0]['id']).to eq(company_1.id)
         end
       end
     end
@@ -63,7 +63,7 @@ RSpec.describe V1::CompaniesController, type: :controller do
       it 'returns empty data array' do
         subject
 
-        expect(json_data).to be_empty
+        expect(json_data['companies']).to be_empty
       end
     end
   end

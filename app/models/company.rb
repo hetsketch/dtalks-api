@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Company < ApplicationRecord
+  paginates_per 10
   include LogoUploader::Attachment.new(:logo)
 
   # To prevent sql injection
