@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :event do
     sequence(:title) { |n| "#{Faker::Lorem.sentence(3)}#{n}" }
     sequence(:text) { |n| "#{Faker::Lorem.paragraph(5)}#{n}" }
