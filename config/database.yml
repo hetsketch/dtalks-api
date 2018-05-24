@@ -4,20 +4,17 @@ default: &default
   pool: 5
   timeout: 5000
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: postgres
+  username: postgres
+  password:
 
 development:
   <<: *default
   database: myapp_development
-  host: postgres
-  username: runner
-  password:
 
 test:
   <<: *default
   database: myapp_test
-  host: postgres
-  username: runner
-  password:
 
 production:
   <<: *default

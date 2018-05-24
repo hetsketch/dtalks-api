@@ -35,10 +35,10 @@ ActiveRecord::Schema.define(version: 20180322125938) do
     t.datetime "updated_at", null: false
     t.integer "employees_count", default: 0
     t.text "logo_data"
-    t.integer "vacancies_count", default: 0
-    t.integer "reviews_count", default: 0
     t.string "url"
     t.float "rating", default: 0.0, null: false
+    t.integer "vacancies_count", default: 0
+    t.integer "reviews_count", default: 0
     t.index ["user_id"], name: "index_companies_on_user_id"
   end
 
@@ -58,8 +58,8 @@ ActiveRecord::Schema.define(version: 20180322125938) do
     t.float "longitude"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "participants_count", default: 0
     t.integer "impressions_count", default: 0
+    t.integer "participants_count", default: 0
     t.integer "comments_count", default: 0
     t.index ["user_id"], name: "index_events_on_user_id"
   end
@@ -164,9 +164,9 @@ ActiveRecord::Schema.define(version: 20180322125938) do
   create_table "topics", id: :serial, force: :cascade do |t|
     t.string "title", null: false
     t.string "text", null: false
+    t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id"
     t.integer "impressions_count", default: 0
     t.integer "comments_count", default: 0
     t.index ["user_id"], name: "index_topics_on_user_id"
