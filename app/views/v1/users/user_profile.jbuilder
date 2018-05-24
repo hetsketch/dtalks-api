@@ -4,5 +4,5 @@ json.success true
 
 json.data do
   json.partial! 'v1/users/user', user: @user
-  json.extract!(@user, :company, :topics, :comments, :events, :links)
+  json.extract!(@user, :topics, :comments, :events)
 end
