@@ -71,4 +71,7 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  #TODO: change to proper url later
+  config.action_cable.url = "wss://ws.example.com/cable"
 end

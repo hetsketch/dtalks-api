@@ -10,10 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180322125938) do
+ActiveRecord::Schema.define(version: 20180420115923) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "chats", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "comments", id: :serial, force: :cascade do |t|
     t.text "text"
@@ -96,6 +101,17 @@ ActiveRecord::Schema.define(version: 20180322125938) do
     t.index ["user_id"], name: "index_impressions_on_user_id"
   end
 
+  create_table "messages", force: :cascade do |t|
+    t.string "text", null: false
+    t.datetime "send_at", null: false
+    t.bigint "user_id"
+    t.bigint "chat_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chat_id"], name: "index_messages_on_chat_id"
+    t.index ["user_id"], name: "index_messages_on_user_id"
+  end
+
   create_table "participants", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "event_id"
@@ -132,6 +148,15 @@ ActiveRecord::Schema.define(version: 20180322125938) do
     t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
     t.index ["name"], name: "index_roles_on_name"
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource_type_and_resource_id"
+  end
+
+  create_table "subscriptions", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "chat_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chat_id"], name: "index_subscriptions_on_chat_id"
+    t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
 
   create_table "taggings", force: :cascade do |t|

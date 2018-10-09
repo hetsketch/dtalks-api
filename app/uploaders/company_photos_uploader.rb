@@ -18,7 +18,12 @@ class CompanyPhotosUploader < Shrine
   end
 
   process :store do |io, context|
-    thumbnail = resize_to_limit(io, THUMBNAIL_SIZE, THUMBNAIL_SIZE)
+    original = io.download
+    pipeline = ImageProcessing::MiniMagick.source(original)
+
+    thumbnail = pipeline.resize_to_limit!(THUMBNAIL_SIZE, THUMBNAIL_SIZE)
+
+    original.close!
 
     { original: io, thumbnail: thumbnail }
   end

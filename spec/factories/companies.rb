@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :company do
     sequence(:name) { |n| "#{Faker::Company.name} #{n}" }
     city Faker::Address.city

@@ -15,7 +15,7 @@ group :development, :test do
   gem 'awesome_print', '~> 1.8.0', require: 'ap'
   gem 'bullet'
   gem 'byebug', platform: :mri
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'faker'
   gem 'listen', '~> 3.0.5'
   gem 'pry'
@@ -42,6 +42,7 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
+# gem 'anycable-rails'
 gem 'aws-sdk-s3', '~> 1.2'
 gem 'devise_token_auth'
 gem 'email_validator'
@@ -49,6 +50,7 @@ gem 'fastimage'
 gem 'image_processing'
 gem 'mini_magick', '>= 4.3.5'
 gem 'pg'
+gem 'redis'
 gem 'shrine'
 
 # OAuth providers
